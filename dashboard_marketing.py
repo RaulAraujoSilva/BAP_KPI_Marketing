@@ -354,13 +354,9 @@ if modulo == "Executive Summary":
         st.markdown("### Metrics Summary")
         resumo_display = resumo[['Tabela', 'Num_Métricas', 'Pct_Preenchimento']].copy()
         resumo_display.columns = ['Module', 'Metrics', 'Completeness (%)']
+        resumo_display['Completeness (%)'] = resumo_display['Completeness (%)'].apply(lambda x: f"{x:.1f}%")
         st.dataframe(
-            resumo_display.style.background_gradient(
-                subset=['Completeness (%)'],
-                cmap='Greens',
-                vmin=0,
-                vmax=100
-            ).format({'Completeness (%)': '{:.1f}'}),
+            resumo_display,
             hide_index=True,
             height=400,
             use_container_width=True
@@ -647,13 +643,11 @@ elif modulo == "Lead Analytics":
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
+        # Formatar a coluna de taxa
+        df_conversao_display = df_conversao.copy()
+        df_conversao_display['Rate_%'] = df_conversao_display['Rate_%'].apply(lambda x: f"{x:.2f}%")
         st.dataframe(
-            df_conversao.style.background_gradient(
-                subset=['Rate_%'],
-                cmap='RdYlGn',
-                vmin=0,
-                vmax=df_conversao['Rate_%'].max()
-            ).format({'Rate_%': '{:.2f}%'}),
+            df_conversao_display,
             hide_index=True,
             height=350,
             use_container_width=True
